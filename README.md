@@ -7,7 +7,8 @@ crafted-item stats. Nothing to install — open it and use it.
 
 Open **[the live browser](https://drexl.github.io/Embers-Crafting-Browser/)**
 in any modern browser, on desktop or mobile. There's nothing to download,
-sign up for, or configure.
+sign up for, or configure. Mobile support is not guaranteed, but may be
+improved in the future.
 
 ## What you can do
 
