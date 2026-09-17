@@ -15,8 +15,8 @@ sign up for, or configure.
 - **Filter your search** by typing `mat:copper` to find recipes that use
   copper, `prof:blacksmith` for one profession, `stat:armor` for a stat, or
   just a plain name. Combine more than one to narrow further.
-- **Preview a craft** before you make it: pick materials and see the
-  resulting item's stats, including how your crafting level affects Quality.
+- **Preview a craft** before you make it: compare color-coded material effects,
+  spot cheaper substitutes, and see how your crafting level affects Quality.
 - **Look up a material** to see every recipe that uses it and, where known,
   which creatures or vendors drop it.
 - **Set your profession levels** once, in Settings, so previews default to
