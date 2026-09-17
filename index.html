@@ -2252,10 +2252,7 @@ input[type="number"]::-webkit-outer-spin-button {
   background: #181916;
   padding: 0;
   overflow: hidden;
-  cursor: pointer;
-}
-.finder-card:hover {
-  border-color: #6d6a60;
+  cursor: default;
 }
 .finder-card.selected {
   border-color: var(--accent);
@@ -2302,28 +2299,25 @@ input[type="number"]::-webkit-outer-spin-button {
   gap: 5px;
   justify-self: end;
 }
-.finder-heart {
+.finder-star {
   width: 20px;
   height: 20px;
   padding: 0;
   border: 0;
   background: none;
-  color: #6d6a60;
+  color: var(--accent);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
 }
-.finder-heart svg {
+.finder-star svg {
   width: 16px;
   height: 16px;
 }
-.finder-heart:hover {
-  color: #d98a8a;
+.finder-star:hover {
+  color: #f0a15a;
 }
-.finder-heart.on {
-  color: #d9607a;
-}
-.finder-heart:disabled {
+.finder-star:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
@@ -2331,16 +2325,61 @@ input[type="number"]::-webkit-outer-spin-button {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
   gap: 10px;
-  margin-bottom: 4px;
+  align-items: start;
+}
+.finder-favourites-panel {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  min-height: 230px;
+  margin-bottom: 18px;
+  padding: 12px;
+  border: 1px solid #45443f;
+  background: #0c0d0c;
+  box-shadow: inset 0 0 22px #000;
+}
+.finder-favourites-panel.is-empty {
+  min-height: 118px;
+}
+.finder-favourites-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px solid #34342f;
+}
+.finder-favourites-head h2 {
+  margin: 0;
+  color: #e3dfd8;
+  font-size: 18px;
+}
+.finder-favourites-count {
+  color: #aaa69d;
+  font: 11px Arial, sans-serif;
+}
+.finder-favourites-empty {
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #77746d;
+  font-size: 12px;
 }
 .finder-card.favourite {
-  border-color: #6d4450;
+  border-color: var(--accent);
 }
-.finder-card-grid.beaten .finder-card {
-  opacity: 0.72;
+.finder-card.pending-unfavourite {
+  animation: finder-unfavourite-fade 1.6s linear forwards;
 }
-.finder-card-grid.beaten .finder-card:hover {
-  opacity: 1;
+@keyframes finder-unfavourite-fade {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.06;
+  }
 }
 .finder-mode-toggle {
   margin-bottom: 6px;
@@ -2487,8 +2526,9 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .finder-card-stats {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 7px 4px;
+  grid-template-columns:
+    minmax(58px, 1.15fr) minmax(52px, 1fr) minmax(56px, 1.08fr) minmax(52px, 1fr);
+  gap: 7px 2px;
   margin: 9px 0 10px;
 }
 .finder-card-stat.zero {
@@ -2501,22 +2541,6 @@ input[type="number"]::-webkit-outer-spin-button {
   width: 22px;
   height: 20px;
   flex: none;
-}
-.finder-card-footnote {
-  position: absolute;
-  top: 0;
-  right: 0;
-  display: block;
-  width: 8px;
-  height: 8px;
-  color: var(--accent);
-  line-height: 0;
-  pointer-events: none;
-}
-.finder-card-footnote svg {
-  display: block;
-  width: 100%;
-  height: 100%;
 }
 .finder-card-spinner {
   display: inline-flex;
@@ -2555,15 +2579,98 @@ input[type="number"]::-webkit-outer-spin-button {
 .finder-card-stat.down {
   color: #d98a8a;
 }
+.finder-card-stat.can-improve .finder-card-glyph > svg {
+  color: var(--accent);
+}
 .finder-card-glyph > svg {
   width: 18px;
   height: 18px;
   flex: none;
 }
-.finder-card .finder-open {
+.finder-card .finder-card-action {
   width: 100%;
+  min-height: 27px;
   font-size: 11px;
-  padding: 3px 6px;
+  font-weight: 600;
+  padding: 4px 6px;
+  border: 1px solid #98500d;
+  background: linear-gradient(#8b490d, #572904 58%, #351904);
+  color: #fff;
+  text-shadow: 0 1px 1px #160900;
+  box-shadow:
+    inset 0 1px #ffc27a66,
+    inset 0 -1px #130800,
+    0 2px 3px #000a;
+  cursor: pointer;
+}
+.finder-card .finder-card-action:hover,
+.finder-card .finder-card-action:focus-visible {
+  border-color: var(--accent-soft);
+  background: linear-gradient(#a95b12, #6b3205 58%, #421e04);
+  outline: none;
+}
+.finder-card .finder-card-action:active {
+  transform: translateY(1px);
+  background: linear-gradient(#4b2105, #301403);
+  box-shadow: inset 0 2px 3px #100700;
+}
+.finder-card .finder-card-action.active {
+  transform: translateY(1px);
+  border-color: var(--accent-soft);
+  background: linear-gradient(#4b2105, #301403);
+  color: var(--accent-soft);
+  box-shadow:
+    inset 0 2px 4px #100700,
+    inset 0 -1px #7c3d08;
+}
+.finder-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+}
+.finder-variant-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.finder-variant-head .finder-section {
+  flex: 1;
+}
+.finder-variant-pager {
+  display: grid;
+  grid-template-columns: 26px minmax(112px, auto) 26px;
+  align-items: center;
+  margin-left: auto;
+  color: #aaa69d;
+  font-size: 12px;
+  text-align: center;
+}
+.finder-variant-page {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+}
+.finder-variant-page:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.finder-variant-page svg {
+  width: 18px;
+  height: 18px;
+}
+.finder-variant-page.previous svg {
+  transform: rotate(-90deg);
+}
+.finder-variant-page.next svg {
+  transform: rotate(90deg);
 }
 .finder-stat-row {
   display: flex;
@@ -2623,13 +2730,6 @@ input[type="number"]::-webkit-outer-spin-button {
   background: #241a0c;
   color: #d9a96a;
   font-size: 12px;
-}
-.finder-open {
-  border: 1px solid var(--accent);
-  background: #4b290d;
-  color: #fff;
-  padding: 7px 10px;
-  cursor: pointer;
 }
 @media (max-width: 560px) {
   .finder-results {
@@ -3006,7 +3106,7 @@ input[type="number"]::-webkit-outer-spin-button {
     <header>
       <span class="brand-logo" style="background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAABkCAYAAADE6GNbAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKFdpbmRvd3MpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkQzRTRCNURDQTMwRjExRUI5MDIyQzU4RjE4QjMyRDE5IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkQzRTRCNUREQTMwRjExRUI5MDIyQzU4RjE4QjMyRDE5Ij4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RDNFNEI1REFBMzBGMTFFQjkwMjJDNThGMThCMzJEMTkiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RDNFNEI1REJBMzBGMTFFQjkwMjJDNThGMThCMzJEMTkiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5ytxW5AAARGklEQVR42uxbe3hU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')" role="img" aria-label="Embers Adrift"></span>
       <h1>Crafting Browser</h1>
-      <span class="version-badge">Beta build 86</span>
+      <span class="version-badge">Beta build 87</span>
       <nav class="view-tabs" aria-label="Browser mode">
         <button class="view-tab active" data-mode="recipes">Recipes</button>
         <button class="view-tab" data-mode="materials">MATERIALS</button>
@@ -3126,11 +3226,20 @@ input[type="number"]::-webkit-outer-spin-button {
             <div class="changelog-log">
           <article class="changelog-entry">
             <div class="changelog-rail">
-              <span class="changelog-date">16 Sep</span>
+              <span class="changelog-date">17 Sep</span>
               <span class="changelog-newest">Current</span>
             </div>
             <ul>
-              <li><span class="changelog-tag">b86</span>Finder selection panels now use consistent table styling. Simple stats read alphabetically down each column, Advanced weights use compact matching rows and dark sliders, and result-card stats no longer overlap.</li>
+              <li><span class="changelog-tag">b87</span>Significant redesign of the Finder tab.</li>
+            </ul>
+          </article>
+
+          <article class="changelog-entry">
+            <div class="changelog-rail">
+              <span class="changelog-date">16 Sep</span>
+            </div>
+            <ul>
+              <li><span class="changelog-tag">b86</span>Various styling improvements and adjustments for consistency across Chromium and Firefox.</li>
               <li><span class="changelog-tag">b85</span>Added a Ko-fi link and removed unavailable cape recipes. Stat names are now consistent throughout the app, and stat filters accept aliases, abbreviations, word-order variations, and minor typos.</li>
               <li><span class="changelog-tag">b84</span>Finder weapon and stat filters now use roomier, consistent selection tables with clearer groups, labels, counts, and disabled-state explanations.</li>
               <li><span class="changelog-tag">b83</span>Added Finder for comparing optimized crafted equipment. Crafted item previews now calculate Radiant Flux's material limit more accurately, and mutually exclusive filters use animated ribbon toggles.</li>
@@ -3295,7 +3404,7 @@ const state = {
     levelMin: 1,
     levelMax: 50,
     weaponTags: [],
-    fluxes: [],
+    fluxes: ["advanced"],
     showStats: [],
     rankBy: "damage",
     weightMode: "simple",
@@ -3306,13 +3415,18 @@ const state = {
 };
 if (!Array.isArray(state.finder.showStats)) state.finder.showStats = [];
 if (!Array.isArray(state.finder.picks)) state.finder.picks = [];
+state.finder.picks = [
+  ...new Set(state.finder.picks.map((stat) => (stat === "damageMin" ? "damage" : stat))),
+].slice(0, 3);
 if (!state.finder.weights || typeof state.finder.weights !== "object") state.finder.weights = {};
 if (state.finder.weightMode !== "advanced") state.finder.weightMode = "simple";
 state.finder.itemKind = "Weapon";
 if (!["None", "Striker", "Supporter", "Defender"].includes(state.finder.role))
   state.finder.role = "None";
-const FINDER_FAVOURITE_LIMIT = 4;
+const FINDER_FAVOURITE_LIMIT = 12;
+const FINDER_UNFAVOURITE_DELAY = 1600;
 let finderFavourites = [];
+const finderPendingUnfavourites = new Map();
 try {
   const saved = JSON.parse(
     localStorage.getItem("embers-finder-favourites") ||
@@ -3326,6 +3440,34 @@ function saveFinderFavourites() {
     localStorage.setItem("embers-finder-favourites", JSON.stringify(finderFavourites));
   } catch {}
 }
+function finderFavouriteElements(key) {
+  return [...document.querySelectorAll(".finder-card.favourite[data-finder-card]")].filter(
+    (card) => card.dataset.finderCard === key,
+  );
+}
+function cancelFinderUnfavourite(key) {
+  const timeout = finderPendingUnfavourites.get(key);
+  if (timeout === undefined) return false;
+  clearTimeout(timeout);
+  finderPendingUnfavourites.delete(key);
+  finderFavouriteElements(key).forEach((card) => card.classList.remove("pending-unfavourite"));
+  return true;
+}
+function beginFinderUnfavourite(key) {
+  if (finderPendingUnfavourites.has(key)) return;
+  const timeout = setTimeout(() => {
+    finderPendingUnfavourites.delete(key);
+    const at = finderFavourites.findIndex((entry) => entry.key === key);
+    if (at < 0) return;
+    finderFavourites.splice(at, 1);
+    if (finderCompareKey === key) finderCompareKey = null;
+    if (finderMaterialsKey === key) finderMaterialsKey = null;
+    saveFinderFavourites();
+    renderFinderResults();
+  }, FINDER_UNFAVOURITE_DELAY);
+  finderPendingUnfavourites.set(key, timeout);
+  finderFavouriteElements(key).forEach((card) => card.classList.add("pending-unfavourite"));
+}
 const FINDER_TIERS = ["advanced", "imbued", "radiant"];
 const FINDER_TIER_COLOURS = {
   advanced: "#5EAB6A",
@@ -3338,6 +3480,7 @@ state.finder.fluxes = [
   ...new Set(state.finder.fluxes.filter((tier) => FINDER_TIERS.includes(tier))),
 ];
 state.finder.fluxes = state.finder.fluxes.slice(0, 1);
+if (!state.finder.fluxes.length) state.finder.fluxes = ["advanced"];
 let craftLevelOverrides = {};
 function craftLevel(recipe) {
   if (state.mode === "finder") return 50;
@@ -5367,8 +5510,8 @@ function facets(index, query = {}) {
   const allOutputs = index.recipes.flatMap((entry) => entry.outputs);
   for (const weaponTag of new Set(allOutputs.map((output) => output.weaponTag).filter(Boolean)))
     available.weaponTags[weaponTag] = countOutputs({ weaponTags: [weaponTag] });
-  for (const flux of ["any", "advanced", "imbued", "radiant"])
-    available.fluxes[flux] = countOutputs({ fluxes: flux === "any" ? [] : [flux] });
+  for (const flux of ["advanced", "imbued", "radiant"])
+    available.fluxes[flux] = countOutputs({ fluxes: [flux] });
 
   for (const entry of index.recipes) {
     if (query.recipeId && String(entry.recipe.id) !== String(query.recipeId)) continue;
@@ -5402,6 +5545,12 @@ function finderStatLabel(DATA, key) {
   return key === "4" ? "Durability" : DATA.assignerNames[key] || `Stat ${key}`;
 }
 
+function finderStatCompare(DATA, a, b) {
+  if (a === "damageMin" && b === "damage") return -1;
+  if (a === "damage" && b === "damageMin") return 1;
+  return finderStatLabel(DATA, a).localeCompare(finderStatLabel(DATA, b));
+}
+
 function finderStatGridOrder(values, columns = 2) {
   if (columns <= 1) return [...values];
   const rows = Math.ceil(values.length / columns);
@@ -5418,6 +5567,8 @@ let FINDER_INDEX = null,
   finderFacetState = null,
   finderResults = [],
   finderCompareKey = null,
+  finderMaterialsKey = null,
+  finderVariantPage = 0,
   finderLevelMenuOpen = false,
   finderRunning = false,
   finderUpdatingFacets = false,
@@ -5446,8 +5597,8 @@ const STAT_ICONS = {
   "28": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-footsteps"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 16.5a2.5 2.5 0 0 0 5 0a1.5 1.5 0 0 0 -1.5 -1.5h-2a1.5 1.5 0 0 0 -1.5 1.5" /><path d="M15 18.5a2.5 2.5 0 0 0 5 0a1.5 1.5 0 0 0 -1.5 -1.5h-2a1.5 1.5 0 0 0 -1.5 1.5" /><path d="M8.52 12h-4.04c-.348 0 -.678 -.179 -.823 -.496c-1.326 -2.904 -.774 -8.504 2.843 -8.504s4.17 5.6 2.843 8.504c-.145 .317 -.475 .496 -.824 .496" /><path d="M19.52 14h-4.04c-.348 0 -.678 -.179 -.823 -.496c-1.326 -2.904 -.774 -8.504 2.843 -8.504s4.17 5.6 2.843 8.504c-.145 .317 -.475 .496 -.824 .496" /></svg>',
   "46": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-viewfinder"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 3l0 4" /><path d="M12 21l0 -3" /><path d="M3 12l4 0" /><path d="M21 12l-3 0" /><path d="M12 12l0 .01" /></svg>',
   "47": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-boom"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 9.662c2 2.338 2 4.338 0 6.338c3 .5 4.5 1 5 4c2 -3 6 -4 9 0c0 -3 1 -4 4 -4.004q -3 -2.995 0 -5.996c-3 0 -5 -2 -5 -5c-2 4 -5 3 -7.5 -1c-.5 3 -2.5 5 -5.5 5.662" /></svg>',
-  "49": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sword-1h"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20 4v5l-9 7l-4 4l-3 -3l4 -4l7 -9l5 0" /><path d="M6.5 11.5l6 6" /><path d="M3.5 4.6l2 -1.6v7" stroke-width="1.7" /></svg>',
-  "50": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-sword-2h"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M20 4v5l-9 7l-4 4l-3 -3l4 -4l7 -9l5 0" /><path d="M6.5 11.5l6 6" /><path d="M2.6 4.2a1.8 1.8 0 0 1 3.6 0c0 1.8 -3.6 3 -3.6 5.8h3.9" stroke-width="1.7" /></svg>',
+  "49": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-sword-1h"><metadata>Derived from "Sword" by iconcheese from the Noun Project, licensed CC BY 3.0.</metadata><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 2c-1.25 3.75-2 7.75-2 11h4c0-3.25-.75-7.25-2-11z"/><path d="M6 13a3 3 0 0 0 3 3h6a3 3 0 0 0 3-3"/><path d="M12 16v4"/><path d="M10.5 21a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0"/></svg>',
+  "50": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-sword-2h"><metadata>Derived from "Sword" by iconcheese from the Noun Project, licensed CC BY 3.0.</metadata><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 4l3-2l3 2v10l-3-2l-3 2z"/><path d="M5 14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/><path d="M12 16v4"/><path d="M10.5 21a1.5 1.5 0 1 0 3 0a1.5 1.5 0 1 0-3 0"/></svg>',
   "51": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-bow"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M17 3h4v4" /><path d="M21 3l-15 15" /><path d="M3 18h3v3" /><path d="M16.5 20c1.576 -1.576 2.5 -4.095 2.5 -6.5c0 -4.81 -3.69 -8.5 -8.5 -8.5c-2.415 0 -4.922 .913 -6.5 2.5l12.5 12.5" /></svg>',
   "115": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-run-sprint"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14.007 5a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M7 17l5 1l.75 -1.5" /><path d="M18 21v-4l-4 -3l1 -6" /><path d="M10 12v-3l5 -1l3 3l3 1" /><path d="M10 5h-4" /><path d="M6 10h-4" /></svg>',
   "116": '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-shield"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3" /></svg>',
@@ -5456,7 +5607,6 @@ const STAT_ICONS = {
   damage: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dice-6"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14" /><path d="M8 7.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M15 7.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M8 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M15 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M15 16.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M8 16.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /></svg>',
   damageMin: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dice-6"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 5a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v14a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-14" /><path d="M8 7.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M15 7.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M8 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M15 12a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M15 16.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /><path d="M8 16.5a.5 .5 0 1 0 1 0a.5 .5 0 1 0 -1 0" fill="currentColor" /></svg>',
 };
-const FINDER_FOOTNOTE_MARKER = '<span class="finder-card-footnote" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 3v18" /><path d="M4 7.5l16 9" /><path d="M4 16.5l16 -9" /></svg></span>';
 let STAT_ICON_LABELS = null;
 function statIconFor(keyOrLabel) {
   if (STAT_ICONS[keyOrLabel]) return STAT_ICONS[keyOrLabel];
@@ -5521,7 +5671,7 @@ function normalizeFinderLevel() {
 function finderChoiceAvailable(group, value) {
   const index = ensureFinderIndex();
   const outputs = index.recipes.flatMap((entry) => entry.outputs);
-  if ((group === "weaponTags" || group === "fluxes") && value === "any") return true;
+  if (group === "weaponTags" && value === "any") return true;
   if (group === "itemKind") return outputs.some((output) => finderKindMatches(output, value));
   if (group === "roles")
     return outputs.some(
@@ -5567,6 +5717,10 @@ function normalizeFinderFilters() {
     finderChoiceAvailable("fluxes", tier),
   );
   state.finder.fluxes = state.finder.fluxes.slice(0, 1);
+  if (!state.finder.fluxes.length)
+    state.finder.fluxes = [
+      FINDER_TIERS.find((tier) => finderChoiceAvailable("fluxes", tier)) || "advanced",
+    ];
   const kindStats = new Set(ensureFinderIndex().statKeysByKind[state.finder.itemKind] || []);
   state.finder.picks = (state.finder.picks || []).filter(
     (stat) => kindStats.has(stat) && !FINDER_UNSCORED.has(stat),
@@ -5667,7 +5821,10 @@ function finderSpinnerSvg() {
 function finderStatRow(stat, statMax) {
   const availableMax = Math.max(0, Math.floor(Number(statMax[stat]) || 0));
   const unavailable = availableMax <= 0;
-  const label = finderStatLabel(DATA, stat);
+  const label =
+    state.finder.weightMode === "simple" && stat === "damage"
+      ? "Damage"
+      : finderStatLabel(DATA, stat);
   const unscored = FINDER_UNSCORED.has(stat);
   const unscoredExplain = (verb) =>
     `${label} isn't scored by the Finder - it's inflated and unreliable in the game data, so it can't be ${verb}`;
@@ -5720,11 +5877,21 @@ function renderFinderControls() {
     return `<div class="finder-weapon-group"><h4>${esc(label)}</h4><div class="finder-weapon-options">${options}</div></div>`;
   };
   const statMax = finderFacetState?.statMax || {};
-  const statKeys = (index.statKeysByKind[query.itemKind] || [])
-    .filter((key) => !FINDER_INTERNAL_STATS.has(key))
-    .sort((a, b) => finderStatLabel(DATA, a).localeCompare(finderStatLabel(DATA, b)));
+  const statKeys = (index.statKeysByKind[query.itemKind] || []).filter(
+    (key) => !FINDER_INTERNAL_STATS.has(key),
+  );
   const displayedStatKeys =
-    query.weightMode === "advanced" ? statKeys : finderStatGridOrder(statKeys);
+    query.weightMode === "advanced"
+      ? [...statKeys].sort((a, b) => finderStatCompare(DATA, a, b))
+      : finderStatGridOrder(
+          statKeys
+            .filter((key) => key !== "damageMin")
+            .sort((a, b) =>
+              (a === "damage" ? "Damage" : finderStatLabel(DATA, a)).localeCompare(
+                b === "damage" ? "Damage" : finderStatLabel(DATA, b),
+              ),
+            ),
+        );
   const itemKindToggle = finderToggleHtml(
     "itemKind",
     [
@@ -5766,17 +5933,14 @@ function renderFinderControls() {
   );
   const tierToggle = finderToggleHtml(
     "fluxes",
-    [
-      { value: "any", label: "Any" },
-      ...FINDER_TIERS.map((tier) => ({
-        value: tier,
-        label: FINDER_TIER_LABELS[tier],
-        disabled: !finderChoiceAvailable("fluxes", tier),
-        className: "finder-tier",
-        style: `--tier:${FINDER_TIER_COLOURS[tier]}`,
-      })),
-    ],
-    query.fluxes[0] || "any",
+    FINDER_TIERS.map((tier) => ({
+      value: tier,
+      label: FINDER_TIER_LABELS[tier],
+      disabled: !finderChoiceAvailable("fluxes", tier),
+      className: "finder-tier",
+      style: `--tier:${FINDER_TIER_COLOURS[tier]}`,
+    })),
+    query.fluxes[0] || "advanced",
     "Tier",
   );
   const statModeToggle = finderToggleHtml(
@@ -5794,15 +5958,15 @@ function renderFinderControls() {
       ? `<div class="finder-stat-hint-row"><p class="finder-stat-hint">Dial how much each stat matters, 0 to 1.</p></div>`
       : `<div class="finder-stat-hint-row"><p class="finder-stat-hint">Pick up to three stats you care about.</p><span class="finder-stat-count">${(query.picks || []).length}/3 chosen</span></div>`;
   $("#recipeList").innerHTML = `<div class="finder-controls">
+    <section class="finder-group"><h3>Equip level</h3>${finderLevelPicker(query.levelMax)}</section>
     <section class="finder-group"><h3>Item kind</h3>${itemKindToggle}</section>
     <section class="finder-group"><h3>Role</h3>${roleToggle}</section>
-    <section class="finder-group"><h3>Equip level</h3>${finderLevelPicker(query.levelMax)}</section>
+    <section class="finder-group"><h3>Tier</h3>${tierToggle}</section>
     ${
       query.itemKind === "Shield"
         ? ""
         : `<section class="finder-group"><h3>Weapon type</h3><div class="finder-weapon-layout"><div class="finder-weapon-groups"><div class="finder-weapon-any">${finderChip("weaponTags", "any", "Any", !query.weaponTags.length)}</div>${weaponTypeGroup("1H", "1H Melee")}${weaponTypeGroup("2H", "2H Melee")}${weaponTypeGroup("Ranged", "Ranged")}</div></div></section>`
     }
-    <section class="finder-group"><h3>Tier</h3>${tierToggle}</section>
     <section class="finder-group finder-stat-group"><h3>Stats</h3>${statModeToggle}${statHint}<div class="finder-stat-list${query.weightMode === "advanced" ? " weighted" : ""}">${displayedStatKeys.map((stat) => finderStatRow(stat, statMax)).join("")}</div></section>
   </div>`;
   syncFinderToggleIndicators();
@@ -5811,7 +5975,7 @@ function renderFinderControls() {
 window.addEventListener("resize", syncFinderToggleIndicators);
 const FINDER_WEAPON_DMG = ["49", "50", "51"];
 const FINDER_SLOTS = ["damage", "weapon", "46", "47", "26", "28", "117", "118", "116", "115", "4"];
-const FINDER_DEEP_STATS = ["damage", "46", "47", "26", "28", "117", "118", "116", "115", "4", "49", "50", "51"];
+const FINDER_DEEP_STATS = ["damageMin", "damage", "46", "47", "26", "28", "117", "118", "116", "115", "4", "49", "50", "51"];
 const finderDeep = new Map();
 let finderDeepQueue = [];
 let finderDeepRunning = false;
@@ -5820,8 +5984,9 @@ function addFinderPerformance(elapsed, visited = 0) {
   finderPerformance.elapsed += elapsed;
   finderPerformance.visited += Number(visited) || 0;
 }
-const FINDER_HEART = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>';
-const FINDER_HEART_FILLED = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 3.176 -10.215z" /></svg>';
+const FINDER_STAR = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-star"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873l-6.158 -3.245"/></svg>';
+const FINDER_STAR_FILLED = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icon-tabler-star-filled"><path d="M8.243 7.34l-6.38 .925l-.113 .023a1 1 0 0 0 -.44 1.684l4.622 4.499l-1.09 6.355l-.013 .11a1 1 0 0 0 1.464 .944l5.706 -3l5.693 3l.1 .046a1 1 0 0 0 1.352 -1.1l-1.091 -6.355l4.624 -4.5l.078 -.085a1 1 0 0 0 -.633 -1.62l-6.38 -.926l-2.852 -5.78a1 1 0 0 0 -1.794 0l-2.853 5.78z"/></svg>';
+const FINDER_PAGE_ARROW = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-arrow-big-up-lines"><path d="M9 12h-3.586a1 1 0 0 1 -.707 -1.707l6.586 -6.586a1 1 0 0 1 1.414 0l6.586 6.586a1 1 0 0 1 -.707 1.707h-3.586v3h-6v-3"/><path d="M9 21h6"/><path d="M9 18h6"/></svg>';
 function finderIsFavourite(result) {
   return finderFavourites.some((entry) => entry.key === result.key);
 }
@@ -5993,7 +6158,7 @@ function finderPoolBuilds() {
 }
 const FINDER_UNSCORED = new Set(["4"]);
 const FINDER_CARD_LIMIT = 24;
-const FINDER_VARIANT_LIMIT = 12;
+const FINDER_VARIANT_PAGE_SIZE = 12;
 function finderRealChoices(builds) {
   const keys = FINDER_DEEP_STATS.filter((key) => !FINDER_UNSCORED.has(key));
   const value = (build, key) => Number(build?.stats?.[key]) || 0;
@@ -6035,7 +6200,14 @@ function finderWeights() {
   const source =
     state.finder.weightMode === "advanced"
       ? Object.entries(state.finder.weights || {})
-      : (state.finder.picks || []).map((stat) => [stat, 1]);
+      : (state.finder.picks || []).flatMap((stat) =>
+          stat === "damage"
+            ? [
+                ["damageMin", 1],
+                ["damage", 1],
+              ]
+            : [[stat, 1]],
+        );
   const weights = new Map();
   for (const [stat, raw] of source) {
     const weight = Number(raw) || 0;
@@ -6195,10 +6367,10 @@ function finderSlotsFor(result) {
     };
   });
 }
-function finderStatCellHtml(slot, extra = "", title = "", showFootnotes = true) {
-  const footnote = slot.canImprove && showFootnotes ? FINDER_FOOTNOTE_MARKER : "";
+function finderStatCellHtml(slot, extra = "", title = "", showUpgradeHint = true) {
+  const improveClass = slot.canImprove && showUpgradeHint ? " can-improve" : "";
   const hint = slot.canImprove ? ` - up to ${slot.reach} with other materials` : "";
-  return `<span class="finder-card-stat${slot.zero ? " zero" : ""}${extra}" title="${esc(title || `${slot.label} ${slot.text}${hint}`)}"><span class="finder-card-glyph">${slot.icon}${footnote}</span><b>${esc(slot.text)}</b></span>`;
+  return `<span class="finder-card-stat${slot.zero ? " zero" : ""}${extra}${improveClass}" title="${esc(title || `${slot.label} ${slot.text}${hint}`)}"><span class="finder-card-glyph">${slot.icon}</span><b>${esc(slot.text)}</b></span>`;
 }
 function finderCardHeaderHtml(result, spinning) {
   const category = craftedCategory(result.recipe, result.selections, result.item);
@@ -6210,19 +6382,21 @@ function finderCardHeaderHtml(result, spinning) {
     : "";
   const favourite = finderIsFavourite(result);
   const full = finderFavourites.length >= FINDER_FAVOURITE_LIMIT && !favourite;
-  const heart = `<button type="button" class="finder-heart${favourite ? " on" : ""}" data-finder-favourite="${esc(result.key)}"${full ? " disabled" : ""} title="${favourite ? "Remove from favourites" : full ? `Favourites are full (${FINDER_FAVOURITE_LIMIT})` : "Keep this build in favourites"}" aria-pressed="${favourite}">${favourite ? FINDER_HEART_FILLED : FINDER_HEART}</button>`;
+  const star = `<button type="button" class="finder-star${favourite ? " on" : ""}" data-finder-favourite="${esc(result.key)}"${full ? " disabled" : ""} title="${favourite ? "Remove from favourites" : full ? `Favourites are full (${FINDER_FAVOURITE_LIMIT})` : "Keep this build in favourites"}" aria-pressed="${favourite}">${favourite ? FINDER_STAR_FILLED : FINDER_STAR}</button>`;
   const level = `<span class="finder-card-level">Lv ${esc(result.item.equipLevel)}</span>`;
-  return `<header class="finder-card-head">${icon(result.item.icon, result.item.name)}<h3>${esc(result.item.name)}</h3><div class="finder-card-meta">${tag}</div><div class="finder-card-aside">${spinner}${level}${heart}</div></header>`;
+  return `<header class="finder-card-head">${icon(result.item.icon, result.item.name)}<h3>${esc(result.item.name)}</h3><div class="finder-card-meta">${tag}</div><div class="finder-card-aside">${spinner}${level}${star}</div></header>`;
 }
 function finderCardHtml(result, baseline, options = {}) {
   const pending = !finderDeep.has(finderDeepKey(result));
-  const open = `<button type="button" class="finder-open" data-finder-open="${esc(result.key)}">Open in Preview</button>`;
+  const materialsOpen = finderMaterialsKey === result.key;
+  const compareOpen = finderCompareKey === result.key;
+  const actions = `<div class="finder-card-actions"><button type="button" class="finder-card-action finder-open" data-finder-open="${esc(result.key)}">Recipe</button><button type="button" class="finder-card-action${materialsOpen ? " active" : ""}" data-finder-materials="${esc(result.key)}" aria-pressed="${materialsOpen}">Variations</button><button type="button" class="finder-card-action${compareOpen ? " active" : ""}" data-finder-compare="${esc(result.key)}" aria-pressed="${compareOpen}">Compare</button></div>`;
   const slots = finderSlotsFor(result);
-  const showFootnotes = options.showFootnotes !== false;
+  const showUpgradeHints = !baseline && options.showFootnotes !== false;
   const selected = !!baseline && baseline.key === result.key;
   let cells;
   if (!baseline || selected) {
-    cells = slots.map((slot) => finderStatCellHtml(slot, "", "", showFootnotes)).join("");
+    cells = slots.map((slot) => finderStatCellHtml(slot, "", "", showUpgradeHints)).join("");
   } else {
     const against = finderSlotsFor(baseline);
     cells = slots
@@ -6236,39 +6410,70 @@ function finderCardHtml(result, baseline, options = {}) {
           { ...slot, text, zero: delta === 0 && slot.zero },
           direction,
           title,
-          showFootnotes,
+          showUpgradeHints,
         );
       })
       .join("");
   }
   const classes = `finder-card${selected ? " selected" : baseline ? " comparing" : ""}${options.className || ""}`;
-  return `<article class="${classes}" data-finder-card="${esc(result.key)}" tabindex="0" role="button" aria-pressed="${selected}">${finderCardHeaderHtml(result, pending)}<div class="finder-card-body"><div class="finder-card-stats">${cells}</div>${open}</div></article>`;
+  return `<article class="${classes}" data-finder-card="${esc(result.key)}">${finderCardHeaderHtml(result, pending)}<div class="finder-card-body"><div class="finder-card-stats">${cells}</div>${actions}</div></article>`;
+}
+function finderResultByKey(key, cards = [], favourites = []) {
+  if (!key) return null;
+  return (
+    cards.find((entry) => entry.key === key) ||
+    favourites.find((entry) => entry.key === key) ||
+    finderDominated.find((entry) => entry.key === key) ||
+    finderPoolBuilds().find((entry) => entry.key === key) ||
+    [...finderDeep.values()]
+      .flatMap((deep) => deep.builds)
+      .find((entry) => entry.key === key) ||
+    null
+  );
 }
 function renderFinderResults() {
   const timing = finderPerformance
     ? `${finderPerformance.visited.toLocaleString()} paths · ${Math.round(finderPerformance.elapsed)} ms`
     : "";
   const cards = finderCards();
-  const favourites = finderFavourites.map(finderFavouriteCard).filter(Boolean);
-  let baseline = finderCompareKey
-    ? cards.find((card) => card.key === finderCompareKey) ||
-      favourites.find((card) => card.key === finderCompareKey) ||
-      null
-    : null;
-  if (finderCompareKey && !baseline)
-    baseline = finderDominated.find((card) => card.key === finderCompareKey) || null;
-  const favouriteBar = favourites.length
-    ? `<h3 class="finder-section">Favourites</h3><div class="finder-favourites">${favourites
-        .map((card) => finderCardHtml(card, baseline, { className: " favourite" }))
-        .join("")}</div>`
-    : "";
+  let favourites = finderFavourites.map(finderFavouriteCard).filter(Boolean);
+  if (finderMaterialsKey)
+    favourites = [...favourites].sort(
+      (a, b) => Number(b.key === finderMaterialsKey) - Number(a.key === finderMaterialsKey),
+    );
+  const favouriteKeys = new Set(favourites.map((card) => card.key));
+  const baseline = finderResultByKey(finderCompareKey, cards, favourites);
+  const materialsCard = finderResultByKey(finderMaterialsKey, cards, favourites);
+  const resultCards = materialsCard
+    ? favouriteKeys.has(materialsCard.key)
+      ? []
+      : [materialsCard]
+    : cards.filter((card) => !favouriteKeys.has(card.key));
+  const favouritePanel =
+    `<section class="finder-favourites-panel${favourites.length ? "" : " is-empty"}"><div class="finder-favourites-head"><h2>FAVORITES</h2><span class="finder-favourites-count">${favourites.length} / ${FINDER_FAVOURITE_LIMIT}</span></div>` +
+    (favourites.length
+      ? `<div class="finder-favourites">${favourites
+          .map((card) =>
+            finderCardHtml(card, baseline, {
+              className: ` favourite${finderPendingUnfavourites.has(card.key) ? " pending-unfavourite" : ""}`,
+            }),
+          )
+          .join("")}</div>`
+      : `<div class="finder-favourites-empty">Star a result to keep it here.</div>`) +
+    `</section>`;
   const truncatedNotice = finderPerformance?.truncated && !finderRunning
     ? `<div class="finder-truncated-notice">Search stopped early - this query is too broad to fully explore. Narrow the filters (a level range or a weapon type) for a complete list.</div>`
     : "";
   const pending = cards.some((card) => !finderDeep.has(finderDeepKey(card)));
   const deepCards =
     cards.length && !finderRunning
-      ? [...(baseline ? [baseline] : []), ...cards, ...finderDominated, ...finderResults]
+      ? [
+          ...(baseline ? [baseline] : []),
+          ...(materialsCard && materialsCard !== baseline ? [materialsCard] : []),
+          ...cards,
+          ...finderDominated,
+          ...finderResults,
+        ]
       : [];
   const calculating =
     finderRunning ||
@@ -6281,21 +6486,27 @@ function renderFinderResults() {
     const picked = [...finderWeights().keys()];
     const cardsCap =
       !baseline && finderCardsTotal > cards.length
-        ? ` Showing ${cards.length} of ${finderCardsTotal}.`
+        ? `Showing ${resultCards.length} of ${finderCardsTotal}.`
         : "";
-    const hint = baseline
-      ? `<p class="finder-compare-hint">Every other card reads as a difference from <b>${esc(baseline.item.name)}</b>. Click it again to stop.</p>`
+    const hint = baseline || finderMaterialsKey
+      ? ""
       : picked.length
-        ? `<p class="finder-compare-hint">${pending ? `${finderSpinnerSvg()} Still searching - ` : ""}Every one of these is the best at something you asked for. Click one to compare the rest against it.${cardsCap}</p>`
-        : `<p class="finder-compare-hint">Click a weapon to compare everything else against it.${cardsCap}</p>`;
-    const grid = `<div class="finder-card-grid">${cards.map((card) => finderCardHtml(card, baseline)).join("")}</div>`;
+        ? `<p class="finder-compare-hint">${pending ? `${finderSpinnerSvg()} Still searching - ` : ""}Every one of these is the best at something you asked for.${cardsCap ? ` ${cardsCap}` : ""}</p>`
+        : cardsCap
+          ? `<p class="finder-compare-hint">${cardsCap}</p>`
+          : "";
+    const grid = resultCards.length
+      ? `<div class="finder-card-grid">${resultCards.map((card) => finderCardHtml(card, baseline)).join("")}</div>`
+      : "";
     let variantSection = "";
-    if (baseline) {
-      const deep = finderDeep.get(finderDeepKey(baseline));
+    if (materialsCard) {
+      const deep = finderDeep.get(finderDeepKey(materialsCard));
       const real = deep ? finderRealChoices(deep.builds) : [];
-      const variants = deep
+      const allVariants = deep
         ? (() => {
-            const others = real.filter((build) => build.key !== baseline.key);
+            const others = real.filter(
+              (build) => build.key !== materialsCard.key && !favouriteKeys.has(build.key),
+            );
             finderScore(others);
             return others
               .sort(
@@ -6303,10 +6514,13 @@ function renderFinderResults() {
                   (b.score || 0) - (a.score || 0) ||
                   (b.breadth || 0) - (a.breadth || 0) ||
                   a.name.localeCompare(b.name),
-              )
-              .slice(0, FINDER_VARIANT_LIMIT);
+              );
           })()
         : [];
+      const pageCount = Math.max(1, Math.ceil(allVariants.length / FINDER_VARIANT_PAGE_SIZE));
+      finderVariantPage = Math.min(finderVariantPage, pageCount - 1);
+      const variantStart = finderVariantPage * FINDER_VARIANT_PAGE_SIZE;
+      const variants = allVariants.slice(variantStart, variantStart + FINDER_VARIANT_PAGE_SIZE);
       const variantBody = !deep
         ? `<p class="finder-compare-hint">${finderSpinnerSvg()} Looking for other materials…</p>`
         : variants.length
@@ -6317,20 +6531,18 @@ function renderFinderResults() {
       const deepIncomplete = deep?.truncated
         ? " This search stopped early, so there may be better materials it didn't reach."
         : "";
+      const variantPager = allVariants.length
+        ? `<div class="finder-variant-pager"><button type="button" class="finder-variant-page previous" data-finder-variant-page="-1"${finderVariantPage === 0 ? " disabled" : ""} title="Previous materials">${FINDER_PAGE_ARROW}</button><span>Showing ${variantStart + 1}–${variantStart + variants.length} of ${allVariants.length}</span><button type="button" class="finder-variant-page next" data-finder-variant-page="1"${finderVariantPage >= pageCount - 1 ? " disabled" : ""} title="Next materials">${FINDER_PAGE_ARROW}</button></div>`
+        : "";
       variantSection =
-        `<h3 class="finder-section">${esc(baseline.item.name)}, other materials</h3>` +
-        `<p class="finder-compare-hint">Every other way to build this weapon, best first for what you picked.${real.length - 1 > variants.length ? ` Showing ${variants.length} of ${real.length - 1}.` : ""}${deepIncomplete}</p>` +
+        `<div class="finder-results-head finder-variant-head"><h2>MATERIAL VARIATIONS</h2>${variantPager}</div>` +
+        `<p class="finder-compare-hint">Every other way to build this weapon, best first for what you picked.${deepIncomplete}</p>` +
         variantBody;
     }
-    const beaten = finderDominated.length
-      ? `<h3 class="finder-section">Beaten on everything you picked</h3>` +
-        `<p class="finder-compare-hint">These lose to something above on every stat you chose. Here in case you want the weapon anyway.${finderDominatedTotal > finderDominated.length ? ` Showing ${finderDominated.length} of ${finderDominatedTotal}.` : ""}</p>` +
-        `<div class="finder-card-grid beaten">${finderDominated.map((card) => finderCardHtml(card, baseline)).join("")}</div>`
-      : "";
-    body = hint + grid + variantSection + beaten;
+    body = hint + grid + variantSection;
   }
   $("#detail").innerHTML =
-    `<div class="finder-results"><div class="finder-results-head"><h2>Craftable results</h2><span>${calculating ? `<span class="finder-loading-status">${finderSpinnerSvg()}<span>Calculating</span></span>` : esc(timing)}</span></div>${truncatedNotice}${favouriteBar}${body}</div>`;
+    `<div class="finder-results">${favouritePanel}<div class="finder-results-head"><h2>RESULTS</h2><span>${calculating ? `<span class="finder-loading-status">${finderSpinnerSvg()}<span>Calculating</span></span>` : esc(timing)}</span></div>${truncatedNotice}${body}</div>`;
   if (deepCards.length) finderQueueDeep(deepCards);
 }
 function startFinderSearch(refreshFacets = finderUpdatingFacets) {
@@ -6420,7 +6632,7 @@ function syncFinderRank() {
     (a, b) =>
       weights.get(b) - weights.get(a) ||
       (state.finder.weightMode === "advanced"
-        ? finderStatLabel(DATA, a).localeCompare(finderStatLabel(DATA, b))
+        ? finderStatCompare(DATA, a, b)
         : 0),
   );
   if (!keys.length) {
@@ -6433,6 +6645,8 @@ function syncFinderRank() {
 }
 function scheduleFinderSearch(refreshFacets = true) {
   finderCompareKey = null;
+  finderMaterialsKey = null;
+  finderVariantPage = 0;
   syncFinderRank();
   saveFinderState();
   const wasRunning = finderRunning;
@@ -7734,13 +7948,6 @@ $("#filterModeToggle").addEventListener("click", () => {
   renderList();
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key !== "Enter" && e.key !== " ") return;
-  const card = e.target.closest("[data-finder-card]");
-  if (!card || e.target.closest("[data-finder-open], [data-finder-favourite]")) return;
-  e.preventDefault();
-  card.click();
-});
-document.addEventListener("keydown", (e) => {
   const current = e.target.closest("[data-finder-toggle-value]");
   if (!current) return;
   const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"];
@@ -7761,6 +7968,12 @@ document.addEventListener("keydown", (e) => {
   buttons[next].click();
 });
 document.addEventListener("click", (e) => {
+  const pendingUnfavourite = e.target.closest(".finder-card.pending-unfavourite");
+  if (pendingUnfavourite) {
+    e.preventDefault();
+    cancelFinderUnfavourite(pendingUnfavourite.dataset.finderCard);
+    return;
+  }
   const comboOptionEl = e.target.closest("[data-combo-index]");
   if (comboOptionEl) {
     chooseComboOption(comboOptions[Number(comboOptionEl.dataset.comboIndex)]);
@@ -7833,21 +8046,27 @@ document.addEventListener("click", (e) => {
     } else if (group === "roles") {
       state.finder.role = value;
     } else if (group === "fluxes") {
-      state.finder.fluxes = value === "any" ? [] : [value];
+      state.finder.fluxes = [value];
     } else if (group === "weightMode") {
       state.finder.weightMode = value;
       if (value === "advanced") {
         const previousWeights = state.finder.weights || {};
         const weights = {};
-        for (const stat of state.finder.picks || [])
+        for (const stat of state.finder.picks || []) {
           weights[stat] = previousWeights[stat] ?? 1;
+          if (stat === "damage") weights.damageMin = previousWeights.damageMin ?? 1;
+        }
         state.finder.weights = weights;
       } else {
-        state.finder.picks = Object.entries(state.finder.weights || {})
+        const picks = [];
+        for (const [stat] of Object.entries(state.finder.weights || {})
           .filter(([, weight]) => (Number(weight) || 0) > 0)
-          .sort((a, b) => Number(b[1]) - Number(a[1]))
-          .slice(0, 3)
-          .map(([stat]) => stat);
+          .sort((a, b) => Number(b[1]) - Number(a[1]))) {
+          const simpleStat = stat === "damageMin" ? "damage" : stat;
+          if (!picks.includes(simpleStat)) picks.push(simpleStat);
+          if (picks.length === 3) break;
+        }
+        state.finder.picks = picks;
       }
     }
     normalizeFinderFilters();
@@ -7895,9 +8114,8 @@ document.addEventListener("click", (e) => {
     const key = favouriteToggle.dataset.finderFavourite;
     const at = finderFavourites.findIndex((entry) => entry.key === key);
     if (at >= 0) {
-      if (!confirm("Remove this build from favourites?")) return;
-      finderFavourites.splice(at, 1);
-      if (finderCompareKey === key) finderCompareKey = null;
+      beginFinderUnfavourite(key);
+      return;
     } else {
       if (finderFavourites.length >= FINDER_FAVOURITE_LIMIT) return;
       const card =
@@ -7912,9 +8130,37 @@ document.addEventListener("click", (e) => {
     renderFinderResults();
     return;
   }
-  const compareCard = e.target.closest("[data-finder-card]");
-  if (compareCard && !e.target.closest("[data-finder-open]")) {
-    const key = compareCard.dataset.finderCard;
+  const variantPage = e.target.closest("[data-finder-variant-page]");
+  if (variantPage && !variantPage.disabled) {
+    finderVariantPage += Number(variantPage.dataset.finderVariantPage);
+    renderFinderResults();
+    return;
+  }
+  const otherMaterials = e.target.closest("[data-finder-materials]");
+  if (otherMaterials) {
+    const key = otherMaterials.dataset.finderMaterials;
+    if (finderMaterialsKey === key) {
+      finderMaterialsKey = null;
+      finderVariantPage = 0;
+      renderFinderResults();
+      return;
+    }
+    if (
+      !finderResultByKey(
+        key,
+        finderCards(),
+        finderFavourites.map(finderFavouriteCard).filter(Boolean),
+      )
+    )
+      return;
+    finderMaterialsKey = key;
+    finderVariantPage = 0;
+    renderFinderResults();
+    return;
+  }
+  const compareToggle = e.target.closest("[data-finder-compare]");
+  if (compareToggle) {
+    const key = compareToggle.dataset.finderCompare;
     finderCompareKey = finderCompareKey === key ? null : key;
     renderFinderResults();
     return;
@@ -7922,13 +8168,11 @@ document.addEventListener("click", (e) => {
   const openFinderResult = e.target.closest("[data-finder-open]");
   if (openFinderResult) {
     const wanted = openFinderResult.dataset.finderOpen;
-    const result =
-      finderResults.find((entry) => entry.key === wanted) ||
-      finderPoolBuilds().find((entry) => entry.key === wanted) ||
-      [...finderDeep.values()]
-        .flatMap((deep) => deep.builds)
-        .find((entry) => entry.key === wanted) ||
-      finderFavourites.filter((entry) => entry.key === wanted).map(finderFavouriteCard)[0];
+    const result = finderResultByKey(
+      wanted,
+      finderResults,
+      finderFavourites.map(finderFavouriteCard).filter(Boolean),
+    );
     if (!result) return;
     if (levelFilterActive()) {
       state.levelMin = 1;
