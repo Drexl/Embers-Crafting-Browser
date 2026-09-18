@@ -4856,10 +4856,7 @@ function dynamicStatGroups(recipe, selections, item) {
     })
     .filter(([, value]) => Number.parseFloat(value) !== 0);
   const weight = armorWeight(values, item);
-  if (weight !== null) {
-    const primaryRows = keys.filter((key) => primary.includes(key)).length;
-    stats.splice(primaryRows, 0, ["Weight", weight]);
-  }
+  if (weight !== null) stats.unshift(["Weight", weight]);
   return { combat, stats };
 }
 function dynamicStats(recipe, selections, item) {
