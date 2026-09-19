@@ -17,6 +17,9 @@ sign up for, or configure.
   just a plain name. Combine more than one to narrow further.
 - **Preview a craft** before you make it: compare color-coded material effects,
   spot cheaper substitutes, and see how your crafting level affects Quality.
+- **Compare crafted weapons** in Finder by level, role, type, and the stats you
+  care about. Broad multi-stat searches are labelled when their results are
+  approximate.
 - **Look up a material** to see every recipe that uses it and, where known,
   which creatures or vendors drop it.
 - **Set your profession levels** once, in Settings, so previews default to
@@ -24,9 +27,11 @@ sign up for, or configure.
 
 ## Saving it for offline use
 
-The whole tool is a single page with everything built in. Save it with your
-browser's Save Page command (usually Ctrl+S, or Cmd+S on a Mac) and you can
-reopen the saved file later without an internet connection.
+The live site uses several files so it can load and cache efficiently. For a
+guaranteed offline copy, download `Embers-Crafting-Browser.html` from the
+[latest release](https://github.com/Drexl/Embers-Crafting-Browser/releases/latest),
+then open that file in any modern browser. The release file contains the full
+app and does not need a network connection.
 
 ## About
 
