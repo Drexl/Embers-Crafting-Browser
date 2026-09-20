@@ -14,7 +14,11 @@ sign up for, or configure.
 - **Browse recipes**, grouped by profession, or search by name.
 - **Filter your search** by typing `mat:copper` to find recipes that use
   copper, `prof:blacksmith` for one profession, `stat:armor` for a stat, or
-  just a plain name. Combine more than one to narrow further.
+  just a plain name. Combine more than one to narrow further. Recipes you open
+  then start with materials that match a `mat:` or `stat:` search selected. An
+  orange search icon marks a material that gives the searched stat on its own,
+  and a blue one a material that gives it only alongside the right material in
+  another slot.
 - **Preview a craft** before you make it: compare color-coded material effects,
   spot cheaper substitutes, and see how your crafting level affects Quality.
 - **Compare crafted weapons** in Finder by level, role, type, and the stats you
