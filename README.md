@@ -21,8 +21,8 @@ sign up for, or configure.
   another slot.
 - **Preview a craft** before you make it: compare color-coded material effects,
   spot cheaper substitutes, and see how your crafting level affects Quality.
-- **Compare crafted weapons** in Finder by level, role, type, and the stats you
-  care about. Broad multi-stat searches are labelled when their results are
+- **Compare crafted weapons and gear** in Finder by level, role, type or slot,
+  and the stats you care about. Broad multi-stat searches are labelled when their results are
   approximate.
 - **Look up a material** to see every recipe that uses it and, where known,
   which creatures or vendors drop it.
