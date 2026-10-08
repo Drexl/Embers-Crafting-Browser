@@ -23,7 +23,8 @@ sign up for, or configure.
   spot cheaper substitutes, and see how your crafting level affects Quality.
 - **Compare crafted weapons and gear** in Finder by level, role, type or slot,
   and the stats you care about. Broad multi-stat searches are labelled when their results are
-  approximate.
+  approximate. Save builds in Favorites to keep them across searches; Results
+  tells you when all matching builds are already saved there.
 - **Look up a material** to see every recipe that uses it and, where known,
   which creatures or vendors drop it.
 - **Set your profession levels** once, in Settings, so previews default to
